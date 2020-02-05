@@ -329,6 +329,10 @@ public class CSVSeries extends Series {
             return true;
         } else {
             for (String s : strExclusionSet) {
+                if (checkPatternIsNotValid(s)) {
+                    continue;
+                }
+
                 try {
                     if (label.matches(s)) {
                         return true;
@@ -340,6 +344,15 @@ public class CSVSeries extends Series {
                     throw e;
                 }
             }
+        }
+        return false;
+    }
+
+    private boolean checkPatternIsNotValid(String pattern) {
+        try {
+            Pattern.compile(pattern);
+        } catch (java.util.regex.PatternSyntaxException e) {
+            return true;
         }
         return false;
     }

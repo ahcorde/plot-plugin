@@ -190,6 +190,24 @@ public class CSVSeriesTest extends SeriesTestCase {
     }
 
     @Test
+    public void testExcludeByRegexWithParentheses() {
+        /*
+         * header before:       Avg,(Median),90,min,max,samples,errors
+         * header afterwards:   Avg,90,min,max,samples,errors
+         */
+        CSVSeries series = new CSVSeries("test_regex_parentheses.csv",
+                null,
+                "EXCLUDE_BY_STRING",
+                "\"Avg\", \"(Median\"",
+                false);
+        List<PlotPoint> points = series.loadSeries(workspaceRootDir,
+                0,
+                System.out);
+        LOGGER.info("Got " + points.size() + " plot points");
+        testPlotPoints(points, 5);
+    }
+
+    @Test
     public void testIncludeByRegex() {
         /*
          * header before: RunId,Trend Measurement Type,HTTP_200,HTTP_201,HTTP_302,HTTP_500,Hits,Throughput,
